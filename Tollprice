@@ -1,0 +1,117 @@
+Imports System.Data.SqlClient
+Public Class toll_price 
+Dim pkVar, q1Var, q2Var As String 
+Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button1.Click 
+ComboBox1.Text = "" 
+ComboBox2.Text = "" 
+ComboBox3.Text = "" 
+TextBox1.Text = "" 
+End Sub 
+Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button2.Click 
+SaveRecord() 
+End Sub 
+Sub SaveRecord() 
+If TextBox1.Text = "" Then 
+MsgBox("Please enter the necessary details") 
+Exit Sub 
+End If 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim Cmd0 As New SqlCommand("select vehcltype from tollpri where frmplc='" & 
+UCase(ComboBox1.Text) & "' and toplc='" & UCase(ComboBox2.Text) & "'", Conn) 
+Dim D1 As SqlDataReader = Cmd0.ExecuteReader() 
+If D1.HasRows Then 
+MsgBox("This record is allready present in the database") 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Exit Sub 
+End If 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+q1Var = "insert into tollpri(" 
+q2var = " values(" 
+q1Var = q1Var & "vehcltype" & "," 
+q2Var = q2Var & "'" & UCase(ComboBox1.Text) & "'," 
+q1Var = q1Var & "frmplc" & "," 
+q2Var = q2Var & "'" & UCase(ComboBox2.Text) & "'," 
+q1Var = q1Var & "toplc" & "," 
+q2Var = q2Var & "'" & UCase(ComboBox3.Text) & "'," 
+q1Var = q1Var & "price" & ")" 
+q2Var = q2Var & "'" & TextBox1.Text & "')" 
+Dim cmd1 As New SqlCommand(q1var & q2var, Conn) 
+End Sub 
+Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As 
+System.Windows.Forms.DataGridViewCellEventArgs) 
+Handles 
+DataGridView1.CellContentClick 
+pkvar = DataGridView1.CurrentRow.Cells(0).Value 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim cmd0 As New SqlCommand("Select * from tollpri where vehcltype='" & pkvar & "'", 
+Conn) 
+Dim D1 As SqlDataReader = cmd0.ExecuteReader() 
+If D1.HasRows Then 
+D1.Read() 
+ComboBox1.Text = D1(0).ToString 
+ComboBox2.Text = D1(1).ToString 
+TextBox1.Text = D1(2).ToString 
+Else 
+ComboBox1.Text = "" 
+ComboBox2.Text = "" 
+TextBox1.Text = "" 
+End If 
+End Sub 
+Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button3.Click 
+If vbNo = MsgBox("Are you sure you want modify", MsgBoxStyle.YesNo, "Modify") 
+Then Exit Sub 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim cmd1 As New SqlCommand("Delete from tollpri where vehcltype='" & pkVar & "'", 
+Conn) 
+cmd1.ExecuteNonQuery() 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+SaveRecord() 
+End Sub 
+Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button4.Click 
+If vbNo = MsgBox("Are you sure you want Delete", MsgBoxStyle.YesNo, "Delete") Then 
+Exit Sub 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim cmd1 As New SqlCommand("Delete from tollpri where vehcltype='" & pkVar & "'", 
+Conn) 
+cmd1.ExecuteNonQuery() 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+disRecords() 
+End Sub 
+Sub disRecords() 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim DS1 As New DataSet 
+Dim adp As New SqlDataAdapter("Select * From tollpri order by vehcltype ", Conn) 
+adp.Fill(DS1) 
+DataGridView1.DataSource = DS1.Tables(0) 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+End Sub 
+Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button5.Click 
+Me.Close() 
+End Sub 
+Private Sub toll_price_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles MyBase.Load 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim Cmd1 As New SqlCommand("Select vehlctype from tolldet order by vehlctype", 
+Conn) 
+Dim D1 As SqlDataReader = Cmd1.ExecuteReader() 
+While D1.Read 
+ComboBox1.Items.Add(D1(0).ToString) 
+End While 
+Me.WindowState = FormWindowState.Maximized 
+End Sub 
+end class
+
+cmd1.ExecuteNonQuery() 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
