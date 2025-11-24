@@ -1,0 +1,60 @@
+Imports System.Data.SqlClient 
+Public Class custdet 
+Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button1.Click 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+Conn.Open() 
+Dim DS1 As New DataSet 
+Dim adp As New SqlDataAdapter("Select * From custreg ", Conn) 
+adp.Fill(DS1) 
+DataGridView1.DataSource = DS1.Tables(0) 
+If Conn.State = ConnectionState.Open Then Conn.Close() 
+End Sub
+Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button2.Click 
+PrintPreviewDialog1.ShowDialog() 
+End Sub 
+Private Sub PrintDocument1_PrintPage(ByVal sender As System.Object, ByVal e As 
+System.Drawing.Printing.PrintPageEventArgs) Handles PrintDocument1.PrintPage 
+Dim XPos, YPos As Long 
+YPos = 50 
+Dim MyFont As New Font("Arial", 18) 
+XPos = 10 
+e.Graphics.DrawString("TOLL COLLECTION LIST ", MyFont, Brushes.Black, XPos, 
+YPos) 
+YPos += 50 
+MyFont = New Font("Arial", 12) 
+e.Graphics.DrawString("No 233, II Floor, UB City, Bangalore", MyFont, Brushes.Black, 
+XPos, YPos) 
+YPos += 100 
+XPos = 10 
+e.Graphics.DrawString("TOLL Detail Report", MyFont, Brushes.Black, XPos, YPos) 
+YPos += 50 
+XPos = 10 
+MyFont = New Font("Arial", 12) 
+e.Graphics.DrawString("custnm", MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+e.Graphics.DrawString("custid", MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+e.Graphics.DrawString("mob", MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+e.Graphics.DrawString("email", MyFont, Brushes.Black, XPos, YPos) 
+YPos += 25 
+For Each r As DataGridViewRow In DataGridView1.Rows 
+XPos = 10 
+e.Graphics.DrawString(r.Cells(0).Value, MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+e.Graphics.DrawString(r.Cells(1).Value, MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+e.Graphics.DrawString(r.Cells(3).Value, MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
+YPos += 50 
+Next 
+End Sub 
+Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+Handles Button3.Click 
+Me.Close() 
+End Sub 
+End Class 
+e.Graphics.DrawString(r.Cells(2).Value, MyFont, Brushes.Black, XPos, YPos) 
+XPos = XPos + 150 
